@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DotNetCore_Tutorial.Models;
+using DotNetCore_Tutorial.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetCore_Tutorial
@@ -21,7 +22,9 @@ namespace DotNetCore_Tutorial
 
         public IActionResult Details(int id)
         {
-            return View(_employeeRepository.GetEmployee(id));
+            HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel();
+            homeDetailsViewModel.Employee = _employeeRepository.GetEmployee(id);
+            return View(homeDetailsViewModel);
         }
 
     }

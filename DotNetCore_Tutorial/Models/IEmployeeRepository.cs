@@ -7,7 +7,7 @@ namespace DotNetCore_Tutorial.Models
 {
     public interface IEmployeeRepository
     {
-        Employee GetEmployee(int id);
+        Employee GetEmployee(int Id);
         IList<Employee> GetEmployees();
     }
 }
