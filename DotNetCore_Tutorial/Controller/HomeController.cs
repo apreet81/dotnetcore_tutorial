@@ -17,7 +17,7 @@ namespace DotNetCore_Tutorial
         }
         public IActionResult Index()
         {
-            return View(_employeeRepository.GetEmployees());
+            return View(_employeeRepository.GetAllEmployees());
         }
 
         public IActionResult Details(int id)
