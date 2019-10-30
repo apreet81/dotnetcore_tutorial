@@ -9,5 +9,6 @@ namespace DotNetCore_Tutorial.Models
     {
         Employee GetEmployee(int Id);
         IList<Employee> GetEmployees();
+        Employee Add(Employee employee);
     }
 }
