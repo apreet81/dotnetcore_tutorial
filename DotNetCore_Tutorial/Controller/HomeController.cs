@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DotNetCore_Tutorial.Models;
+﻿using DotNetCore_Tutorial.Data;
 using DotNetCore_Tutorial.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 

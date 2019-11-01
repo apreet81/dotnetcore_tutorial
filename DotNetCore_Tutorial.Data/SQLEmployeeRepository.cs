@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotNetCore_Tutorial.Models
+namespace DotNetCore_Tutorial.Data
 {
     public class SQLEmployeeRepository : IEmployeeRepository
     {
@@ -44,9 +45,10 @@ namespace DotNetCore_Tutorial.Models
 
         public Employee Update(Employee employeeChanges)
         {
-            var employee = context.Employees.Attach(employeeChanges);
-            employee.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            context.SaveChanges();
+            var existingEmployee = context.Employees.Where(e => e.Id == employeeChanges.Id).FirstOrDefault();
+            existingEmployee.Name = employeeChanges.Name;
+            existingEmployee.Email = employeeChanges.Email;
+            existingEmployee.Department = employeeChanges.Department;
             return employeeChanges;
         }
     }
