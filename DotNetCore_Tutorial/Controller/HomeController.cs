@@ -1,4 +1,4 @@
-﻿using DotNetCore_Tutorial.Data;
+﻿using DotNetCore_Tutorial.Models;
 using DotNetCore_Tutorial.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 

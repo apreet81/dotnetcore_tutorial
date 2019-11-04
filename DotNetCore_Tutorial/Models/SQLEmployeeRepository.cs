@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotNetCore_Tutorial.Data
+namespace DotNetCore_Tutorial.Models
 {
     public class SQLEmployeeRepository : IEmployeeRepository
     {

@@ -1,4 +1,4 @@
-﻿using DotNetCore_Tutorial.Data;
+﻿using DotNetCore_Tutorial.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
