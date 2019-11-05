@@ -1,15 +1,22 @@
 ﻿using DotNetCore_Tutorial.Models;
 using DotNetCore_Tutorial.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 
 namespace DotNetCore_Tutorial
 {
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public HomeController(IEmployeeRepository employeeRepository)
+        private readonly IHostingEnvironment _hostingEnvironment;
+
+        public HomeController(IEmployeeRepository employeeRepository,
+                              IHostingEnvironment hostingEnvironment)
         {
             _employeeRepository = employeeRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
         public IActionResult Index()
         {
@@ -30,10 +37,26 @@ namespace DotNetCore_Tutorial
         }
 
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
+                string uniqueFileName = string.Empty;
+                if (model.Photo != null)
+                {
+                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+
+                Employee employee = new Employee()
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Department = model.Department,
+                    PhotoPath = uniqueFileName
+                };
                 Employee newEmployee = _employeeRepository.Add(employee);
                 return RedirectToAction("details", new { id = newEmployee.Id });
             }
