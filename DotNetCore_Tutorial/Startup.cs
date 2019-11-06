@@ -39,6 +39,11 @@ namespace DotNetCore_Tutorial
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            }
 
             app.UseFileServer();
             //app.UseMvcWithDefaultRoute();

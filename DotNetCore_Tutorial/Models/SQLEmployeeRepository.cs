@@ -49,6 +49,8 @@ namespace DotNetCore_Tutorial.Models
             existingEmployee.Name = employeeChanges.Name;
             existingEmployee.Email = employeeChanges.Email;
             existingEmployee.Department = employeeChanges.Department;
+            existingEmployee.PhotoPath = employeeChanges.PhotoPath;
+            context.SaveChanges();
             return employeeChanges;
         }
     }
