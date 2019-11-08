@@ -6,6 +6,7 @@ using DotNetCore_Tutorial.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,9 @@ namespace DotNetCore_Tutorial
             services.AddMvc();
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
             //services.AddScoped<AppDbContext>(_ => new AppDbContext(_config.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
         }
 
@@ -46,8 +50,11 @@ namespace DotNetCore_Tutorial
             }
 
             app.UseFileServer();
+            app.UseAuthentication();
+
             //app.UseMvcWithDefaultRoute();
-            app.UseMvc(routes=> {
+            app.UseMvc(routes =>
+            {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 

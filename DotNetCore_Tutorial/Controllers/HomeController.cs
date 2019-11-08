@@ -3,21 +3,25 @@ using DotNetCore_Tutorial.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 
-namespace DotNetCore_Tutorial
+namespace DotNetCore_Tutorial.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
+        public ILogger<HomeController> logger;
 
         public HomeController(IEmployeeRepository employeeRepository,
-                              IHostingEnvironment hostingEnvironment)
+                              IHostingEnvironment hostingEnvironment,
+                              ILogger<HomeController> logger)
         {
-            _employeeRepository = employeeRepository;
-            _hostingEnvironment = hostingEnvironment;
+            this._employeeRepository = employeeRepository;
+            this._hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
         }
         public IActionResult Index()
         {
@@ -26,6 +30,14 @@ namespace DotNetCore_Tutorial
 
         public IActionResult Details(int? id)
         {
+            logger.LogTrace("Trace Log");
+            logger.LogDebug("Debug Log");
+            logger.LogInformation("Information Log");
+            logger.LogWarning("Warning Log");
+            logger.LogError("Error Log");
+            logger.LogCritical("Critical Log");
+
+            //throw new Exception();
             Employee employee = _employeeRepository.GetEmployee(id.Value);
             if (employee == null)
             {
