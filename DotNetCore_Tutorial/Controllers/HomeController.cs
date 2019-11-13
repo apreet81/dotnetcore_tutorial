@@ -1,5 +1,6 @@
 ﻿using DotNetCore_Tutorial.Models;
 using DotNetCore_Tutorial.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,13 @@ namespace DotNetCore_Tutorial.Controllers
             this._hostingEnvironment = hostingEnvironment;
             this.logger = logger;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View(_employeeRepository.GetAllEmployees());
         }
 
+        [AllowAnonymous]
         public IActionResult Details(int? id)
         {
             logger.LogTrace("Trace Log");
