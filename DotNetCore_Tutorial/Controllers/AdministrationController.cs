@@ -21,7 +21,7 @@ namespace DotNetCore_Tutorial.Controllers
     //[Authorize(Roles = "Admin")]
     //[Authorize(Roles = "User")]
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminRolePolicy")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -33,6 +33,13 @@ namespace DotNetCore_Tutorial.Controllers
             this.roleManager = roleManager;
             this.userManager = userManager;
             this.logger = logger;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -71,6 +78,8 @@ namespace DotNetCore_Tutorial.Controllers
             return View(roles);
         }
 
+        [HttpGet]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
@@ -100,6 +109,7 @@ namespace DotNetCore_Tutorial.Controllers
 
         // This action responds to HttpPost and receives EditRoleViewModel
         [HttpPost]
+        [Authorize(Policy = "EditRolePolicy")]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             var role = await roleManager.FindByIdAsync(model.Id);
@@ -236,7 +246,7 @@ namespace DotNetCore_Tutorial.Controllers
                 Email = user.Email,
                 UserName = user.UserName,
                 City = user.City,
-                Claims = userClaims.Select(c => c.Value).ToList(),
+                Claims = userClaims.Select(c => c.Type + " : " + c.Value).ToList(),
                 Roles = userRoles
             };
 
@@ -304,6 +314,7 @@ namespace DotNetCore_Tutorial.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
@@ -448,7 +459,7 @@ namespace DotNetCore_Tutorial.Controllers
 
                 // If the user has the claim, set IsSelected property to true, so the checkbox
                 // next to the claim is checked on the UI
-                if (existingUserClaims.Any(c => c.Type == claim.Type))
+                if (existingUserClaims.Any(c => c.Type == claim.Type && c.Value == "true"))
                 {
                     userClaim.IsSelected = true;
                 }
@@ -482,7 +493,7 @@ namespace DotNetCore_Tutorial.Controllers
 
             // Add all the claims that are selected on the UI
             result = await userManager.AddClaimsAsync(user,
-                model.Cliams.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType)));
+                model.Cliams.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true" : "false")));
 
             if (!result.Succeeded)
             {

@@ -79,9 +79,14 @@ namespace DotNetCore_Tutorial.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            return View();
+            LoginViewModel model = new LoginViewModel()
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins=(await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            return View(model);
         }
 
         [HttpPost]
@@ -107,18 +112,25 @@ namespace DotNetCore_Tutorial.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            //var redirectUrl = Url.Action("ExternalLoginCallback", "Account",
+            //                    new { ReturnUrl = returnUrl });
+
+            var redirectUrl = Url.Action("", "signin-google",
+                     new { ReturnUrl = returnUrl });
+            var properties = signInManager
+                .ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult AccessDenied()
-        {
-            return View();
         }
     }
 }
