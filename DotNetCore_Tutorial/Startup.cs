@@ -50,8 +50,8 @@ namespace DotNetCore_Tutorial
 
             services.AddAuthentication()
                 .AddGoogle(options => {
-                    options.ClientId = "813859982437-0g5ttu3qs52ikpa1onrno3ogk98oidcj.apps.googleusercontent.com";
-                    options.ClientSecret = "-CJkHVcafJB0DqSCFnViQ13b";
+                    options.ClientId = "546475863607-qthov8kg2rglpitmn3qga2qe4ghtaj69.apps.googleusercontent.com";
+                    options.ClientSecret = "4pQcNYI847GymzXgDIdplt1A";
                 });
 
             services.AddAuthorization(options =>
