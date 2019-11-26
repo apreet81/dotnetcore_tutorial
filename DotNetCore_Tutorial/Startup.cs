@@ -52,6 +52,7 @@ namespace DotNetCore_Tutorial
                 .AddGoogle(options => {
                     options.ClientId = "546475863607-qthov8kg2rglpitmn3qga2qe4ghtaj69.apps.googleusercontent.com";
                     options.ClientSecret = "4pQcNYI847GymzXgDIdplt1A";
+                    //options.CallbackPath = "";
                 });
 
             services.AddAuthorization(options =>
