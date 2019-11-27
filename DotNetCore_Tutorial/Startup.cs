@@ -53,6 +53,10 @@ namespace DotNetCore_Tutorial
                     options.ClientId = "546475863607-qthov8kg2rglpitmn3qga2qe4ghtaj69.apps.googleusercontent.com";
                     options.ClientSecret = "4pQcNYI847GymzXgDIdplt1A";
                     //options.CallbackPath = "";
+                })
+                .AddFacebook(options=> {
+                    options.AppId = "586436052128751";
+                    options.AppSecret = "25376e11c7d7447a0f1c51a30cd4fb6b";
                 });
 
             services.AddAuthorization(options =>
