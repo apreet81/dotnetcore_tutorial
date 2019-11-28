@@ -1,12 +1,15 @@
 ﻿using DotNetCore_Tutorial.Models;
+using DotNetCore_Tutorial.Security;
 using DotNetCore_Tutorial.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace DotNetCore_Tutorial.Controllers
 {
@@ -15,23 +18,33 @@ namespace DotNetCore_Tutorial.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
         public ILogger<HomeController> logger;
+        private readonly IDataProtector protector;
 
         public HomeController(IEmployeeRepository employeeRepository,
                               IHostingEnvironment hostingEnvironment,
-                              ILogger<HomeController> logger)
+                              ILogger<HomeController> logger,
+                              IDataProtectionProvider dataProtectionProvider,
+                              DataProtectionPurposeStrings dataProtectionPurposeStrings)
         {
             this._employeeRepository = employeeRepository;
             this._hostingEnvironment = hostingEnvironment;
             this.logger = logger;
+            protector = dataProtectionProvider.CreateProtector(dataProtectionPurposeStrings.EmployeeIdRouteValue);
         }
         [AllowAnonymous]
         public IActionResult Index()
         {
-            return View(_employeeRepository.GetAllEmployees());
+            var model = _employeeRepository.GetAllEmployees()
+                .Select(e =>
+                {
+                    e.EncryptedId = protector.Protect(e.Id.ToString());
+                    return e;
+                });
+            return View(model);
         }
 
         [AllowAnonymous]
-        public IActionResult Details(int? id)
+        public IActionResult Details(string id)
         {
             logger.LogTrace("Trace Log");
             logger.LogDebug("Debug Log");
@@ -40,12 +53,14 @@ namespace DotNetCore_Tutorial.Controllers
             logger.LogError("Error Log");
             logger.LogCritical("Critical Log");
 
+            int employeeId =Convert.ToInt32(protector.Unprotect(id));
+
             //throw new Exception();
-            Employee employee = _employeeRepository.GetEmployee(id.Value);
+            Employee employee = _employeeRepository.GetEmployee(employeeId);
             if (employee == null)
             {
                 Response.StatusCode = 404;
-                return View("EmployeeNotFound", id.Value);
+                return View("EmployeeNotFound", id);
             };
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
             {

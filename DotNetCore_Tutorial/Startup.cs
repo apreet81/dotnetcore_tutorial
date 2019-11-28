@@ -32,10 +32,22 @@ namespace DotNetCore_Tutorial
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 10;
-                options.Password.RequiredUniqueChars = 3;
+                //options.Password.RequiredLength = 10;
+                //options.Password.RequiredUniqueChars = 3;
+
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+
+                options.SignIn.RequireConfirmedEmail = true;
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
             })
-            .AddEntityFrameworkStores<AppDbContext>();
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<CustomEmailConfirmationTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
+
+            services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(5));
+
+            services.Configure<CustomEmailConfirmationTokenProviderOptions>(c => c.TokenLifespan = TimeSpan.FromDays(3));
 
             //services.Configure<IdentityOptions>(options=> {
             //    options.Password.RequiredLength = 10;
@@ -49,12 +61,14 @@ namespace DotNetCore_Tutorial
             });
 
             services.AddAuthentication()
-                .AddGoogle(options => {
+                .AddGoogle(options =>
+                {
                     options.ClientId = "546475863607-qthov8kg2rglpitmn3qga2qe4ghtaj69.apps.googleusercontent.com";
                     options.ClientSecret = "4pQcNYI847GymzXgDIdplt1A";
                     //options.CallbackPath = "";
                 })
-                .AddFacebook(options=> {
+                .AddFacebook(options =>
+                {
                     options.AppId = "586436052128751";
                     options.AppSecret = "25376e11c7d7447a0f1c51a30cd4fb6b";
                 });
@@ -103,6 +117,8 @@ namespace DotNetCore_Tutorial
 
             services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+
+            services.AddSingleton<DataProtectionPurposeStrings>();
         }
 
         private bool AuthorizeAccess(AuthorizationHandlerContext context)
