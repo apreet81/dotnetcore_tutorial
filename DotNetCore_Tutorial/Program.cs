@@ -30,6 +30,9 @@ namespace DotNetCore_Tutorial
                     // Enable NLog as one of the Logging Provider
                     logging.AddNLog();
                 })
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }

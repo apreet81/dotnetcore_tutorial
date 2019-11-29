@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -34,6 +35,7 @@ namespace DotNetCore_Tutorial.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            //LaunchProcess();
             var model = _employeeRepository.GetAllEmployees()
                 .Select(e =>
                 {
@@ -168,6 +170,45 @@ namespace DotNetCore_Tutorial.Controllers
             }
 
             return uniqueFileName;
+        }
+
+        Process process = new Process();
+
+        void LaunchProcess()
+        {
+            process.EnableRaisingEvents = true;
+            process.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_OutputDataReceived);
+            process.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_ErrorDataReceived);
+            process.Exited += new System.EventHandler(process_Exited);
+
+            process.StartInfo.FileName = @"C:\Windows\System32\Robocopy.exe";
+            process.StartInfo.Arguments = "\"E:\\Amanpreet\\Projects\\DayCare\\DayCare-20190613\" \"D:\\Share\\Daycare\" /mir";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.RedirectStandardOutput = true;
+
+            process.Start();
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
+
+            //below line is optional if we want a blocking call
+            //process.WaitForExit();
+        }
+
+        void process_Exited(object sender, EventArgs e)
+        {
+            Console.WriteLine(string.Format("process exited with code {0}\n", process.ExitCode.ToString()));
+        }
+
+        void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Data + "\n");
+        }
+
+        void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Response.WriteAsync(e.Data + "\n");
+            Console.WriteLine(e.Data + "\n");
         }
     }
 }
