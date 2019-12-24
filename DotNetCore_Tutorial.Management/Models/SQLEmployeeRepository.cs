@@ -1,11 +1,11 @@
-﻿using DotNetCore_Tutorial.Models;
+﻿using DotNetCore_Tutorial.Management.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotNetCore_Tutorial.Models
+namespace DotNetCore_Tutorial.Management.Models
 {
     public class SQLEmployeeRepository : IEmployeeRepository
     {

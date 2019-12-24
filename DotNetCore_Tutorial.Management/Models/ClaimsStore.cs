@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace DotNetCore_Tutorial.Models
+namespace DotNetCore_Tutorial.Management.Models
 {
     public static class ClaimsStore
     {

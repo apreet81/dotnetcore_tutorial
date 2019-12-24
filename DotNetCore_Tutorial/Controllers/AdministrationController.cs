@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DotNetCore_Tutorial.Models;
+using DotNetCore_Tutorial.Management.Models;
 using DotNetCore_Tutorial.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DotNetCore_Tutorial.Migrations
+namespace DotNetCore_Tutorial.Management.Migrations
 {
     public partial class DisableCascadeDelete : Migration
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace DotNetCore_Tutorial.Migrations
+namespace DotNetCore_Tutorial.Management.Migrations
 {
     public partial class seedFunction : Migration
     {

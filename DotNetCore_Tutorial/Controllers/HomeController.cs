@@ -1,4 +1,4 @@
-﻿using DotNetCore_Tutorial.Models;
+﻿using DotNetCore_Tutorial.Management.Models;
 using DotNetCore_Tutorial.Security;
 using DotNetCore_Tutorial.ViewModels;
 using Microsoft.AspNetCore.Authorization;

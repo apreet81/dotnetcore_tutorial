@@ -1,4 +1,4 @@
-﻿using DotNetCore_Tutorial.Models;
+﻿using DotNetCore_Tutorial.Management.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

@@ -2,23 +2,23 @@
 using System;
 using System.Collections.Generic;
 
-namespace DotNetCore_Tutorial.Migrations
+namespace DotNetCore_Tutorial.Management.Migrations
 {
-    public partial class AddPhotoPathCol : Migration
+    public partial class ExtentApplicationUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "PhotoPath",
-                table: "Employees",
-                nullable: true);            
+                name: "City",
+                table: "AspNetUsers",
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PhotoPath",
-                table: "Employees");
+                name: "City",
+                table: "AspNetUsers");
         }
     }
 }
